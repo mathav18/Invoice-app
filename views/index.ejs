@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+   <script src="jquery-3.6.1.min.js"></script>
+   <script src="https://kit.fontawesome.com/4d02abcf66.js" crossorigin="anonymous"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Lobster&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap'); </style> 
+    <link  id="theme" href="css/index.css" rel="stylesheet" type="text/css" />
+    <title>Document</title>
+</head>
+<body>
+    
+   
+
+
+
+   
+
+  
+   <div id="whole">
+    <div id="navigate">
+
+   <div id="logo__div">
+    <div id="one">
+        <img src="logo.svg">
+    </div>
+</div>
+<div id="navigate__bottom">
+    <img src="icon-moon.svg" id="themeicon" onclick="theme(this)">
+    
+    <img src="image-avatar.jpg" id="themeicon">
+     
+</div>
+  
+    </div>
+    <div id="feed">
+        <div id="head">
+            <div id="first">
+                <h1  >Invoices   </h1>
+                    <p style="font-size: 20px; color:rgb(159, 159, 159);margin-top:-30px;">There are <%=dataArray.length%> total invoices</p>
+             </div>
+           <div id="second">
+            <p >Filter by status 
+                <select id="filter" onclick="filter(this)">
+                    <option value="All">All</option>
+                    <option value="Paid" >Paid</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            
+            </p>
+
+            <div id="button">
+                <div style="width:50px;height:50px; background-color: white; color: #7C5DFA; border-radius:50%;" id="plusIcon"><i class="fa-solid fa-plus"></i></div>
+                New Invoice</div>
+           </div>
+        </div>
+
+        <div id="contentArea">
+
+            <%if(dataArray==''){%>
+                     <div id="image_Div">
+                        <img src="/empty.svg">
+                        <h1 style="color:white">There is nothing here</h1>
+                        <p style="color:rgb(218, 218, 218)">Create an invoice by clicking the 
+                            New Invoice button and get started</p>
+                                 
+                     </div>
+            <%}else{
+           for(let i of dataArray){
+            let date1="";
+            let date2="";
+           let temp=i.date.date;
+           let temp2=Number(i.date.payement)
+           let createDate = new Date(temp);
+           createDate.setDate(createDate.getDate()+temp2);
+           let result = createDate.toISOString();
+           const payday = new Date(result);
+
+           const paymentdate = payday.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          });
+
+           <!-- //total amount -->
+
+     
+       
+            %>
+
+                <div id="contentDiv">
+                <h2 ><%=i.userId%></h2>
+                
+                <h3 >due <%=paymentdate%></h3>
+                <h3></h3>
+                <h2 ><%=i.total%></h2>
+              
+
+                <%if(i.status=='Pending'){%>
+                    <div id="box">•<%=i.status%></div>
+                <%}else{
+                    if(i.status=='Paid'){%>
+                        <div id="box2" >•<%=i.status%></div>
+                <%}else{%>
+                    <div id="box1" >•<%=i.status%></div>
+                 <%}}%>
+               
+                <form action="/ViewInvoice"  method="POST" id="buttonForm">
+                    <button  type="submit" id="arrow" name="id" value=<%=i.id%>  ></button>
+                </form>
+              </div>
+            <%}}%>
+        </div>
+         </div>
+</div>
+<!-- new whole div and form -->
+<div id="hideDiv">
+    <form action="/addItem" method="POST" id="AddForm">
+        <div id="content">
+         <span style="font-size:30px;">New Invoice</span>
+        </div>
+
+        <div id="content">
+            <p style="color:#7C5DFA;font-size:20px;">Bill From</p>
+            <p style="color:rgb(158, 158, 158);font-size:15px;margin-top:-6px;">Street Address</p>
+            <input type="text" value="19 Union Terrace" style="pointer-events: none;" name="companyStreet">
+
+            <div style="display: flex; width:90%; justify-content: space-between;">
+                <div>
+                    <p style="color:rgb(176, 176, 176);font-size:15px;">City</p>
+                     <input type="text" id="inputBox"value="London" style="pointer-events: none;"name="city" >
+                </div>
+
+                <div>
+                    <p style="color:rgb(176, 176, 176);font-size:15px;">Post Code</p>
+                     <input type="text" id="inputBox" value="E1 3EZ" style="pointer-events: none;" name="postCode">
+                </div>
+                 <div>
+                    <p style="color:rgb(176, 176, 176);font-size:15px;">Country</p>
+                     <input type="text" id="inputBox" value="United Kingdom" style="pointer-events: none;" name="country" >
+                </div>
+             </div>
+             </div>
+    <div id="content">
+        <p style="color:#7C5DFA;font-size:18px;">Bill To</p>
+        <p style="color:rgb(176, 176, 176);font-size:15px;margin-top:-5px">Client's Name</p>
+        <input type="text" name="clientName">
+
+        <p style="color:rgb(176, 176, 176);font-size:15px;">Client's Email</p>
+        <input type="text" name="clientEmail">
+
+        <p style="color:rgb(176, 176, 176);font-size:15px;">Street Address</p>
+        <input type="text" name="clientAddress">
+   
+
+
+    <div style="display:flex; width:90%; justify-content:space-between;">
+        <div>
+            <p style="color:#989898;font-size:15px;" >City</p>
+             <input type="text" id="inputBox" name="clientCity">
+        </div>
+         <div>
+            <p style="color:#989898; font-size:15px;">Post Code</p>
+             <input type="text" id="inputBox" name="clientPostCode">
+        </div>
+         <div>
+            <p style="color:#989898; font-size:15px;">Country</p>
+             <input type="text" id="inputBox" name="clientCountry">
+        </div>
+        </div>
+
+        <div style="display:flex; width:90%; justify-content:space-between;">
+            <div>
+                <p style="color:#989898;font-size:15px;" >Invoice Date</p>
+                 <input type="date" id="date" name="date">
+            </div>
+             <div>
+                <p style="color:#989898; font-size:15px;">Payement Terms</p>
+                 <select type="text" id="date" name="Payement">
+                    <option value="1">Net 1 days</option>
+                    <option value="5">Net 5 days</option>
+                    <option value="10">Net 10 days</option>
+                    <option value="30">Net 30 days</option>
+                 </select>
+            </div>
+    </div>
+    <p style="color:rgb(176, 176, 176);font-size:15px;">Project Description</p>
+    <input type="text" name="project">
+     </div>
+
+     <div id="content">
+        <p>Item List</p>
+        <div id="itemList">
+            <p style="color:#989898;font-size:15px;" >Item Name</p>
+            <p style="color:#989898; font-size:15px;" >Qty.</p>
+            <p style="color:#989898; font-size:15px;">Price</p>
+            <p style="color:#989898; font-size:15px;">Total</p>
+            <p style="color:#989898; font-size:15px;" >Delete</p>
+        </div>
+
+
+    
+    <div id="itemList">
+        <input type="text" id="date" style="width:150px" name="ItemName">
+        <input type="number" id="date" style="width:50px" name="Qty" oninput="totalAmmount(this)">
+        <input type="number" id="date" style="width:90px" name="price" oninput="totalAmmount2(this)" >
+        <input type="number" id="date" style="width:70px;border: none;" name="total" class="total">
+       <i class="fa-solid fa-trash"  id="waste" onclick="removeItem()"></i>
+    </div>
+                
+            
+            
+      
+        <div id="content1" style="width:100%" ></div>
+ 
+        <div id="content">
+          <div id="addNew" onclick="AddItem()">+Add New Item</div>
+         <div style="display: flex;justify-content: space-between;width:90%">
+            <input type="button" value="Discard" style="background:#F9FAFE;color:#7C5DFA" id="buttons" class="x">
+            <input type="submit" value="save and Draft" style="background:rgb(0, 0, 0);color:#888EB0" id="buttons" name="save">
+            <input type="submit" value="Save and Save" style="background:#7C5DFA;color:rgb(255, 255, 255)" id="buttons" name="save">
+         </div>
+         <div style="width: 100%;height:20px"></div>
+        </div>
+        </form>
+    </div>
+    </div>
+        </body>
+
+<script src="script.js"></script>
+</body>
+</html>

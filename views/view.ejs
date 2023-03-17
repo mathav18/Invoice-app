@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+   <script src="jquery-3.6.1.min.js"></script>
+   <script src="https://kit.fontawesome.com/4d02abcf66.js" crossorigin="anonymous"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Lobster&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap'); </style> 
+    <link    id="viewTheme" href="css/view.css" rel="stylesheet" type="text/css" />
+    <title>Document</title>
+</head>
+<body>
+
+    <%let temp=val.date.date;let createDate = new Date(temp);createDate.setDate(createDate.getDate());let result = createDate.toISOString();%>
+    
+<%let payday = new Date(result);%>
+
+<%let date = payday.toLocaleDateString('en-GB', {
+ day: 'numeric',
+ month: 'short',
+ year: 'numeric'
+});%>
+<%;let temp2=Number(val.date.payement)%>
+<%createDate = new Date(temp);createDate.setDate(createDate.getDate()+temp2);result = createDate.toISOString();payday = new Date(result);%>
+
+<%let date1 = payday.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+   });%>
+
+                                                          
+    <div id="deleteBox">
+        <div id="tempDiv">
+            <div id="deleteDiv">
+                <h2 id="hi">Confirm Deletion</h2>
+                <p>Are you sure you want to delete invoice <%=val.userId%> This action cannot be undone.</p>
+                <div id="buttonsDiv">
+                    <button    class="hai">Cancel</button>
+                    <form id="deleteForm" style=" padding-left: 20px;"  action="deleteInvoice" method="POST">
+                        <input type="text" value="<%=val.id%>" name="id" id="inpHide">
+                        <input type="submit" id="deleteForm" style=" background: #EC5757;" value="Delete">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+          
+    </div>
+   <div id="whole">
+    <div id="navigate">
+        <div id="logo__div">
+            <div id="one">
+                <img src="logo.svg">
+            </div>
+        </div>
+        <div id="navigate__bottom">
+            <img src="icon-sun.svg" id="themeicon" onclick="theme(this)">
+            
+            <img src="image-avatar.jpg" id="themeicon">
+             
+        </div>
+    </div>
+    <div id="feed">
+        <div id="head">
+            <form action="/backToHome" method="POST"><div style="width:70%"><button id="backButton" onclick="history.back()">Go back</button></div></form>
+          
+          <div style="width:70%;height:50%;border-radius: 8px;" id="template">
+            <div id="fst" style="width:20%">
+            <h4 style="color: #DFE3FA;">status</h4>
+            <%if(val.status=='Pending'){%>
+                <div id="box">•<%=val.status%></div>
+            <%}else{
+                if(val.status=='Paid'){%>
+                    <div id="box2" >•<%=val.status%></div>
+            <%}else{%>
+                <div id="box1" >•<%=val.status%></div>
+             <%}}%>
+         </div>
+            <div id="fst" style="width:35%"> 
+                <button id="button" style="background: #252945;color: #DFE3FA;" class="hde">Edit</button>
+                <button id="button"style="background: #EC5757;color: #FFFFFF;"  class="deleteButton">Delete</button>
+                <form id="formTop" action="/markAsPaid" method="POST" >
+                    <button id="button" style="background: #7C5DFA; color: #FFFFFF;" value="<%=val.id%>" name="id">Mark as paid</button>
+                </form>
+                
+            </div> 
+        </div>
+        </div>
+        <div id="content_div">
+            <div id="contentArea">
+                <div id="userId_Project_Div">
+                    <div>
+                       <h2><%=val.userId%></h2> 
+                         <p>Graphic Design</p>
+                    </div>
+                    <div>
+                        <p id="user_Address"> 19 Union Terrace<br>
+                        London<br>
+                       E1 3EZ<br>
+                        United Kingdom<br>
+                       </div>
+                </div>
+
+                <div id="userId_Project_Div2">
+                    <div >
+                         <h2>Invoice Date</h2>
+                         <h3><%=date%></h3>
+                         <h2>Payment Due</h2> 
+                         <h3 ><%=date1%></h3>
+                    </div>
+         <div>
+                        
+                  <p>Bill to</p>
+                       <h3 " style="color:black"><%=val.user.name%></h3>
+                        <p ><%=val.user.address%><br>
+                        <%=val.user.city%><br>
+                        <%=val.user.postcode%><br>
+                        <%=val.user.country%><br>
+                       </div>
+                       <div>
+                        <p>send to</p>
+                        <p><%=val.user.email%></p>
+                       </div>
+                       </div>
+                       <div id="itemDiv">
+                        <div id="list_Div">
+                            <p>Item Name</p>
+                            <p>Qty.</p>
+                            <p>Price</p>
+                            <p>Total</p>
+                       </div>
+                      
+                       
+            <%if(Array.isArray(val.item.ItemName)){
+
+                for(let i=0;i<val.item.ItemName.length; i++){%>
+                        <div id="list_Div">
+                            <p><%=val.item.ItemName[i]%></p>
+                            <p><%=val.item.Qty[i]%></p>
+                            <p><%=val.item.price[i]%></p>
+                            <p><%=val.item.total[i]%></p>
+                       </div>
+                       <%}}else{%>
+                        <div id="list_Div">
+                            <p><%=val.item.ItemName%></p>
+                            <p><%=val.item.Qty%></p>
+                            <p><%=val.item.price%></p>
+                            <p><%=val.item.total%></p>
+                       </div>
+                        <% }%>
+
+                       <div id="Amount_Div">
+                            <h3>Amount Due</h3>
+                            <% if(Array.isArray(val.item.total)){ %>
+                                <h3>$ <%=val.total%> </h3>
+                                <%} else{ %>
+                                <h3>$ <%=val.item.total%> </h3>
+                           <%}%>
+                          
+                        </div>
+                  </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+<!-- new whole div and form -->
+<div id="hideDiv">
+    <form  id="AddForm" action="/ChangeInvoice" method="POST">
+        <div id="content">
+         <span style="font-size:30px;">New Invoice</span>
+         <input type="text" value="<%=val.id%>" style="width:0px;height:0px" name="nameId">
+        </div>
+
+        <div id="content">
+            <p style="color:#7C5DFA;font-size:20px;">Bill From</p>
+            <p style="color:rgb(158, 158, 158);font-size:15px;margin-top:-6px;">Street Address</p>
+            <input type="text" value="19 Union Terrace" style="pointer-events: none;" name="companyStreet">
+
+            <div style="display: flex; width:90%; justify-content: space-between;">
+                <div>
+                    <p style="color:rgb(176, 176, 176);font-size:15px;">City</p>
+                     <input type="text" id="inputBox"value="London" style="pointer-events: none;"name="city" >
+                </div>
+
+                <div>
+                    <p style="color:rgb(176, 176, 176);font-size:15px;">Post Code</p>
+                     <input type="text" id="inputBox" value="E1 3EZ" style="pointer-events: none;" name="postCode">
+                </div>
+                 <div>
+                    <p style="color:rgb(176, 176, 176);font-size:15px;">Country</p>
+                     <input type="text" id="inputBox" value="United Kingdom" style="pointer-events: none;" name="country" >
+                </div>
+             </div>
+             </div>
+    <div id="content">
+        <p style="color:#7C5DFA;font-size:18px;">Bill To</p>
+        <p style="color:rgb(176, 176, 176);font-size:15px;margin-top:-5px" >Client's Name</p>
+        <input type="text" name="clientName" value="<%=val.user.name%>">
+
+        <p style="color:rgb(176, 176, 176);font-size:15px;" >Client's Email</p>
+        <input type="text" name="clientEmail"  value="<%=val.user.email%>">
+
+        <p style="color:rgb(176, 176, 176);font-size:15px;" >Street Address</p>
+        <input type="text" name="clientAddress" value="<%=val.user.address%>">
+   
+
+
+    <div style="display:flex; width:90%; justify-content:space-between;">
+        <div>
+            <p style="color:#989898;font-size:15px;"   >City</p>
+             <input type="text" id="inputBox" name="clientCity" value="<%=val.user.city%>">
+        </div>
+         <div>
+            <p style="color:#989898; font-size:15px;">Post Code</p>
+             <input type="text" id="inputBox" name="clientPostCode"  value="<%=val.user.postcode%>">
+        </div>
+         <div>
+            <p style="color:#989898; font-size:15px;">Country</p>
+             <input type="text" id="inputBox" name="clientCountry" value="<%=val.user.country%>">
+        </div>
+        </div>
+
+        <div style="display:flex; width:90%; justify-content:space-between;">
+            <div>
+                <p style="color:#989898;font-size:15px;" >Invoice Date</p>
+                 <input type="date" id="date" name="date" value="<%=val.date.date%>">
+            </div>
+             <div>
+                <p style="color:#989898; font-size:15px;">Payement Terms</p>
+                 <select type="text" id="date" name="Payement" value="<%=val.date.Payement%>">
+                    <option value="1">Net 1 days</option>
+                    <option value="5">Net 5 days</option>
+                    <option value="10">Net 10 days</option>
+                    <option value="30">Net 30 days</option>
+                 </select>
+            </div>
+    </div>
+    <p style="color:rgb(176, 176, 176);font-size:15px;">Project Description</p>
+    <input type="text" name="project"  value="<%=val.date.project%>">
+     </div>
+
+     <div id="content">
+       
+        <div id="content1" style="width:100%" >
+            <p>Item List</p>
+ <div id="itemList">
+   
+    <p style="color:#989898;font-size:15px;" >Item Name</p>
+    <p style="color:#989898; font-size:15px;" >Qty.</p>
+    <p style="color:#989898; font-size:15px;">Price</p>
+    <p style="color:#989898; font-size:15px;">Total</p>
+    <p style="color:#989898; font-size:15px;" >Delete</p>
+ </div>
+           
+
+                    
+                    
+            
+            <%if(Array.isArray(val.item.ItemName)){
+
+                for(let i=0;i<val.item.ItemName.length; i++){%>
+                    <div id="itemList">
+                                 <input type="text" id="date" style="width:150px" name="ItemName" value="<%=val.item.ItemName[i]%>">
+                                <input type="number" id="date" style="width:50px" name="Qty" value="<%=val.item.Qty[i]%>" ninput="totalAmmount(this)">
+                                <input type="number" id="date" style="width:90px" name="price" value="<%=val.item.price[i]%>" oninput="totalAmmount2(this)" >
+                                <input type="number" id="date" style="width:70px;border: none;" value="<%=val.item.total[i]%>" name="total" class="total">
+                                <i class="fa-solid fa-trash" id="waste"  onclick="removeItem(this)"></i>
+                    </div>
+               
+        <%}}else{%>
+
+      <div id="itemList">
+                    <input type="text" id="date" style="width:150px" name="ItemName" value="<%=val.item.ItemName%>">
+                   <input type="number" id="date" style="width:50px" name="Qty" value="<%=val.item.Qty%>" oninput="totalAmmount(this)">
+                  <input type="number" id="date" style="width:90px" name="price" value="<%=val.item.price%>" oninput="totalAmmount2(this)" >
+                   <input type="number" id="date" style="width:70px;border: none;" value="<%=val.item.total%>" name="total" class="total">
+                <i class="fa-solid fa-trash" id="waste"  onclick="removeItem(this)"></i>
+              </div>
+
+           <% }%>
+
+
+        </div>
+    </div>
+        <div id="content">
+          <div id="addNew" onclick="AddItem()">+Add New Item</div>
+         <div style="display: flex;justify-content: space-between;width:90%">
+            <input type="button" value="Cancel" style="background:#F9FAFE;color:#7C5DFA" id="buttons" class="x">
+            <button style="background:#7C5DFA;color:rgb(255, 255, 255)" id="buttons"  name="userid">Save Changes</button>
+
+         </div>
+         <div style="width: 100%;height:20px"></div>
+        </div>
+          
+      </form>
+</div>
+
+<script src="view.js"></script>
+
+</body>
+</html>
